@@ -4,7 +4,7 @@
 모든 로그가 콘솔에 출력이 되는 구조였지만, 오래된 프로젝트라서 그런지 오랜만에 돌려보니 콘솔로 안나오네요. 콘솔 넣는 것도 고생스러웠는데 프로그램도 세월에 녹이 스나봅니다. ㅋㅋ<br>
 
 <p align="center">
-  <img src="mailslot.jpg" width="300" height="400">
+  <img src="Mailslot.JPG" width="300" height="400">
 </p>
 
 ## Mailslot이란?
