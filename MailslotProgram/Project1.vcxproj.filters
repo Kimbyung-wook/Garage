@@ -15,30 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="guicon.cpp">
+    <ClCompile Include="src\guicon.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="src\MailSlot.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MailSlot.cpp">
+    <ClCompile Include="src\Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="guicon.h">
+    <ClInclude Include="inc\guicon.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Main.h">
+    <ClInclude Include="inc\MailSlot.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MailSlot.h">
+    <ClInclude Include="inc\Main.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="resource1.h">
+    <ClInclude Include="inc\resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
