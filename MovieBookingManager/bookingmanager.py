@@ -22,6 +22,11 @@ if __name__ == "__main__":
   timer  = Timer()
   prevtic = timer.get_tic()
   dt = 60*60
+  now = datetime.now()
+  nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')
+  msg = '%s : 이제 예매표 본다..! : %s 일자 %s %s'%(nowDatetime, date, MovieName, Theater)
+  print(msg)
+  imax_booking_bot.sendMessage(chat_id=chat_id, text=msg)
   while True:
     time.sleep(1)
     if True:
