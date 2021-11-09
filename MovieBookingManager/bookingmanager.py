@@ -4,14 +4,14 @@ import time
 from timer import Timer
 from bs4 import BeautifulSoup
 from datetime import datetime
-date = '17'
-MovieName = '유체이탈자'
-Theater = '2D'
-# date = '14'
-# MovieName = '이터널스'
-# Theater = 'IMAX관'
+# date = '211117'
+# MovieName = '유체이탈자'
+# Theater = '2D'
+date = '211114'
+MovieName = '이터널스'
+Theater = 'IMAX관'
 # Theater = '4DX'
-url = "http://www.cgv.co.kr/common/showtimes/iframeTheater.aspx?areacode=01&theatercode=0013&date=202111"+date
+url = "http://www.cgv.co.kr/common/showtimes/iframeTheater.aspx?areacode=01&theatercode=0013&date=20"+date
 
 telegram_token = ''
 chat_id = ''
