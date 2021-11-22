@@ -19,8 +19,8 @@ do_stop = False
 def stop_command(update, context):
   update.message.repley_text('알람 그만할게~')
   
-telegram_token = '2123557705:AAHG1FzLzGnKd2S7_DuA9TL7dHfwBWZaXFk'
-chat_id = '2081860151'
+telegram_token = ''
+chat_id = ''
 imax_booking_bot = telegram.Bot(token = telegram_token)
 # updater = Updater(telegram_token, use_context = True)
 # stop_handler = CommandHandler('stop', stop_command)
