@@ -1,5 +1,6 @@
 import requests
 import telegram
+from telegram.ext import Updater, MessageHandler, CommandHandler, Filters
 import time
 from timer import Timer
 from bs4 import BeautifulSoup
@@ -13,22 +14,32 @@ Theater = 'IMAX관'
 # Theater = '4DX'
 url = "http://www.cgv.co.kr/common/showtimes/iframeTheater.aspx?areacode=01&theatercode=0013&date=20"+date
 
+# For Telegram
+do_stop = False
+def stop_command(update, context):
+  update.message.repley_text('알람 그만할게~')
+  
 telegram_token = ''
 chat_id = ''
 imax_booking_bot = telegram.Bot(token = telegram_token)
+# updater = Updater(telegram_token, use_context = True)
+# stop_handler = CommandHandler('stop', stop_command)
+# updater.dispatcher.add_handler(stop_handler)
 
 if __name__ == "__main__":
+  
+  isFirst = True
   didyouget = False
   timer  = Timer()
   prevtic = timer.get_tic()
   dt = 60*60
+
   now = datetime.now()
   nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')
   msg = '%s : 이제 예매표 본다..! : %s 일자 %s %s'%(nowDatetime, date, MovieName, Theater)
   print(msg)
   imax_booking_bot.sendMessage(chat_id=chat_id, text=msg)
   while True:
-    time.sleep(1)
     if True:
       resp = requests.get(url)
       html = resp.text
@@ -47,9 +58,14 @@ if __name__ == "__main__":
           break
         else:
           msg = '%s : %s 일자 %s - %s - 아직 안뜸...ㅠ'%(nowDatetime, date, MovieName, Theater)
+    # updater.start_polling(timeout=0, clean=True)
+    # updater.idle()
     nowtic = timer.get_tic()
-    if (nowtic - prevtic > dt):
+    if ((isFirst == True) | (nowtic - prevtic > dt)):
+      isFirst = False
       # print('dt : ',nowtic - prevtic)
       prevtic = nowtic
       print(msg)
       imax_booking_bot.sendMessage(chat_id=chat_id, text=msg)
+
+    time.sleep(3)
