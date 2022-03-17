@@ -3,14 +3,19 @@ import struct
 
 # local_ip = "127.0.0.1"
 # local_port = 3000
-local_ip = "192.168.10.151"
-local_port = 2000
+my_ip = "192.168.10.151"
+my_port = 2000
+target_ip = "192.168.10.160"
+target_port = 1000
 buffersize = 1024
 
+server_addr_port = (target_ip, target_port)
+UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPServerSocket.bind((local_ip, local_port))
+UDPServerSocket.bind((my_ip, my_port))
 UDPServerSocket.setblocking(False)
-print("Server IP Addr : {}".format((local_ip, local_port)))
+print("Server IP Addr : {}".format((my_ip, my_port)))
 # UDPServerSocket.settimeout(1.0)
 
 print("UDP server up and listening")
@@ -49,6 +54,8 @@ while(True):
     print("{} ".format(msg_value[i]), end='')
   print("")
 
+  # msg_from_client = b'\x70\x00\x70\x00\x00\x00\x00\x00\x00\x00\x40\x00\x00\x00\x00\x00\x00\x00\x40'
+  UDPClientSocket.sendto(msg, server_addr_port)
   # # Show raw message
   # print(msg)
 
