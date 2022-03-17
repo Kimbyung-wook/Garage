@@ -1,39 +1,31 @@
 import socket
 
-local_ip = "127.0.0.1"
-local_port = 3000
+# 클라이언트가 보내고자 하는 서버의 IP와 PORT
+server_ip = "127.0.0.1"
+server_port = 3000
+server_addr_port = (server_ip, server_port)
 buffersize = 1024
 
-msg_from_server = "Hello Client"
-bytes2send = str.encode(msg_from_server)
+# 소켓을 UDP로 열고 서버의 IP/PORT를 연결한다. 그리고 Non-blocking로 바꾼다.
+udp_server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+udp_server_socket.bind(server_addr_port)
+udp_server_socket.setblocking(False)
+# udp_server_socket.settimeout(1.0)
 
-UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPServerSocket.bind((local_ip, local_port))
-UDPServerSocket.setblocking(False)
-# UDPServerSocket.settimeout(1.0)
-
-print("UDP server up and listening")
+print("UDP server is up and listening")
 
 # Listen Datagram incoming
 while(True):
   try:
-    byte_addr_pair = UDPServerSocket.recvfrom(buffersize)
+    byte_addr_pair = udp_server_socket.recvfrom(buffersize)
   except BlockingIOError:
     continue
-  msg = byte_addr_pair[0]
+  msg  = byte_addr_pair[0]
   addr = byte_addr_pair[1]
 
-  client_msg = "msg from client : {}".format(buffersize)
+  client_msg = "msg from client : {}".format(len(msg))
   client_ip  = "client IP Addr : {}".format(addr)
 
   print(client_msg)
   print(client_ip)
   print(msg)
-  for i in range(len(msg)):
-    print("{:02x}".format(msg[i]),end=' ')
-  print("")
-  # print(type(msg))
-  # print(msg[0])
-  # print(len(msg))
-
-  # UDPServerSocket.sendto(bytes2send, addr)
