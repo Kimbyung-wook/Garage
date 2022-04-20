@@ -17,6 +17,7 @@ class point_model():
 
     if 'dt' in attr:
       self.dt = attr['dt']
+      print("dT : ", self.dt)
     if 'attitude' in attr:
       euler = np.array(attr['attitude'])
       euler = np.reshape(euler, (np.size(euler)))
@@ -40,20 +41,26 @@ class point_model():
   def step(self):
     vB = self.vB_in
     wB = self.wB_in
-    euler = np.array(self.att.as_euler('xyz'))
+    euler = np.array(self.att.as_euler('xyz', degrees=False))
     p = wB[0]; phi   = euler[0]
     q = wB[1]; theta = euler[1]
     r = wB[2]; psi   = euler[2]
     quat = np.array(self.att.as_quat())
     quat = np.array([quat[3],quat[0],quat[1],quat[2]])
-    w4   = np.array([ [ 0, p, q, r],
-                      [-p, 0,-r, q],
-                      [-q, r, 0,-p],
-                      [-r,-q, p, 0] ])
+    quat = quat / np.linalg.norm(quat)
+    u = np.concatenate((wB,quat))
+    qdot = [- 0.5 * (u[4]*u[0] + u[5]*u[1] + u[6]*u[2]),
+            + 0.5 * (u[3]*u[0] + u[5]*u[2] - u[6]*u[1]),
+            + 0.5 * (u[3]*u[1] + u[6]*u[0] - u[4]*u[2]),
+            + 0.5 * (u[3]*u[2] + u[4]*u[1] - u[5]*u[0])]
+    # w4   = np.array([ [ 0, p, q, r],
+    #                   [-p, 0,-r, q],
+    #                   [-q, r, 0,-p],
+    #                   [-r,-q, p, 0] ])
+    # qdot  = - 0.5 * np.dot(w4, quat)
     Euler2wB = np.array([ [1, np.sin(phi)*np.tan(theta), np.cos(phi)*np.tan(theta)],
                           [0, np.cos(phi),              -np.sin(phi)],
                           [0, np.sin(phi)/np.cos(theta), np.cos(phi)/np.cos(theta)] ])
-    qdot  = - 0.5 * np.dot(w4, quat)
     qdot  = np.array([qdot[1],qdot[2],qdot[3],qdot[0]])
     quat  = np.array([quat[1],quat[2],quat[3],quat[0]])
     wE    = np.dot(Euler2wB, wB)
@@ -72,12 +79,17 @@ class point_model():
     self.vN = vN; self.vB = vB
     self.wE = wE; self.wB = wB
 
+  # def _mini_step(self, ins):
+
+
+
+
   def get_state(self):
     tmp = np.concatenate((self.vB, self.wB))
     return tmp
 
   def get_all_state(self):
-    tmp = np.concatenate((self.pN, self.att.as_euler('xyz'),
+    tmp = np.concatenate((self.pN, self.att.as_euler('xyz', degrees=False),
                           self.vN, self.vB,
                           self.wE, self.wB))
     return tmp

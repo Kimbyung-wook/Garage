@@ -17,6 +17,38 @@ class lpf_1st():
     self.x = x_new
     return self.x
 
+class ctrl_pi():
+  def __init__(self, kp, ki):
+    self.int = 0.0
+    self.kp = kp
+    self.ki = ki
+    self.do_set_minmax = False
+    self.out_min = -1.0
+    self.out_max = -1.0
+  
+  def set_minmax(self, min, max):
+    assert (min>max) is True, "min value is bigger than max"
+    self.do_set_minmax = True
+    self.out_min = min
+    self.out_max = max
+    
+  def step(self, dt, x_cmd, x):
+    ex = x_cmd - x
+
+    angleP   = ex*self.kp;  # Roll
+    self.int = ex*self.ki*dt + self.int; # Roll
+    
+    ctrl_out  = angleP + self.int
+    if self.do_set_minmax:
+      if (ctrl_out > self.out_max):
+          self.int = - angleP + self.out_max
+      elif (ctrl_out < self.out_min):
+          self.int = - angleP + self.out_min
+      ctrl_out  = angleP + self.int
+    ctrl_return = ctrl_out
+
+    return ctrl_return
+
 def pqr2eulerrate(pqr_in, att_in):
   '''
   input  : pqr [rad/s]
