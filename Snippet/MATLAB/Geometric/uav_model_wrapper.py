@@ -10,6 +10,7 @@ class uav_model_wrapper(point_model):
     self.action_in = np.zeros((1,6))
     self.action_out = np.zeros((1,6))
     self._angleI = 0.0
+    self.do_loiter = False
 
     self.attr = dict()
     self.attr['tauU']  = np.array(      1.0, dtype=float)
@@ -35,17 +36,61 @@ class uav_model_wrapper(point_model):
       self.vB[0] = attr['u0']
       self.u_model.reset(attr['u0'])
       
+
+  # def set_state(self, roll, pitch, yaw, pN, pE, pD, u, v, w):
+  # def set_state(self, roll, pitch, yaw, pN, pE, pD, vN, vE, vD):
+  def set_state(self, roll, pitch, yaw, lla, lla_ref, u,v,w):
+    '''
+      Input
+        roll, pitch, yaw : deg
+        pN, pE, pD : m
+        u : m/s
+    '''
+    euler = np.array([roll, pitch, yaw])
+    euler = np.reshape(euler, (np.size(euler)))
+    euler = np.flip(euler, 0)
+    self.att = R.from_euler('zyx',euler, degrees=True)
+
+    # lla_ref_deg = np.array([lla_ref[0] / np.pi * 180.0, lla_ref[1] / np.pi * 180.0, lla_ref[2]])
+    # lla_deg     = np.array([lla[0] / np.pi * 180.0, lla[1] / np.pi * 180.0, lla[2]])
+    # print("degree:", lla_ref_deg, lla_deg)
+
+    pNED = lla2flat(lla, lla_ref)
+    # print(lla, lla_ref, pNED)
+    self.pN[0] = pNED[0]
+    self.pN[1] = pNED[1]
+    self.pN[2] = pNED[2]
+    
+    # self.vN[0] = vN
+    # self.vN[1] = vE
+    # self.vN[2] = vD
+    # self.vB    = np.dot(self.att.inv().as_matrix(), self.vN)
+    # self.pN[0] = pN
+    # self.pN[1] = pE
+    # self.pN[2] = pD
+    self.vB[0] = u
+    self.vB[1] = 0.0
+    self.vB[2] = 0.0
+    self.vN    = np.dot(self.att.as_matrix(),self.vB)
+
   def set_raw_action(self, action_in):
     '''
       action item : [u,v,w,p,q,r]
     '''
     self.action_in = action_in
+    return self.action_in
+
+  def set_wp_lla_action(self, target_lla, lla_ref, desired_speed, desired_radius, direction):
+    target_ned = lla2flat(target_lla, lla_ref)
+    action_out = np.array([target_ned[0],target_ned[1],target_ned[2],
+                            desired_speed, desired_radius, direction])
+    output = self.set_wp_acion(action_out)
+    return output
 
   def set_wp_action(self, action_in):
     '''
       action item : [TpN, TpE, TpD, Spd, Rd, Dir]
     '''
-    D2R = 180.0/np.pi
     # print('action_in ', action_in)
     euler   =  self.att.as_euler('xyz', degrees=False)
     phi     =  euler[0]
@@ -59,14 +104,30 @@ class uav_model_wrapper(point_model):
     Dir     =  action_in[5]
     Spd     =    self.vB[0]
 
-    # Vector Field Guidance
-    out = self._loiter_vf(psi, n_vf, e_vf, Spd, Rd, -Dir)
-    phi_cmd = out[0]
-    omega   = out[1]
+    Distance = np.sqrt(n_vf * n_vf + e_vf * e_vf)
+    # print(Distance, n_vf, e_vf, self.pN)
+
+    # # Approach
+    if (self.do_loiter == False):
+      chi_cmd = np.rad2deg(np.arctan2(e_vf, n_vf)) + 180.0
+
+    if (Distance < 10):
+      print(Distance, n_vf, e_vf)
+      exit()
+
+    # # Loitering : Vector Field Guidance
+    # if (self.do_loiter == True):
+    #   chi_cmd = self._loiter_vf(n_vf, e_vf, Rd, -Dir)
+
+    # Exit
+    chi_cmd = self._loiter_vf(n_vf, e_vf, Rd, -Dir)
+
+    phi_cmd = self._heading_ctrl(chi_cmd, psi)
+    omega = self._get_omega_from_phi_cmd(phi_cmd, Spd)
 
     # Something Control Mode
     dH_out = 0.01 * dH
-    dH_sat = np.max((-10.0*D2R,np.min((dH_out, 10.0*D2R))))
+    dH_sat = np.max((np.deg2rad(-10.0),np.min((dH_out, np.deg2rad(10.0)))))
     theta_out = 3.0 * (dH_sat - theta)
     pqr_att   = [ 5.0 * (phi_cmd - phi), 0.0, 0.0]
     pqr_coord = [-omega*np.sin(theta),
@@ -86,9 +147,19 @@ class uav_model_wrapper(point_model):
     # print(action_out)
     self.action_in = action_out
 
-  def step(self):
+    return self.action_in
+
+  def mimic_model(self):
+    '''
+      UseCase
+      set_state()
+      set_raw_action() or set_wp_action()
+      new_state = mimic_model()
+    '''
     # Mimic Coyote Model
     # print(self.action_in)
+    # print('euler ',self.att.as_euler('zyx', degrees=True), ' pN ', self.pN, ' vB ', self.vB, ' vN ', self.vN, ' actions ',self.action_out)
+
     u_cmd = np.max((self.attr['u_min'], np.min((self.action_in[0], self.attr['u_max'])))); 
     p_cmd = np.max((self.attr['p_min'], np.min((self.action_in[3], self.attr['p_max'])))); 
     q_cmd = np.max((self.attr['q_min'], np.min((self.action_in[4], self.attr['q_max'])))); 
@@ -97,42 +168,39 @@ class uav_model_wrapper(point_model):
     p = self.p_model.step(self.dt, p_cmd) # p_cmd
     q = self.q_model.step(self.dt, q_cmd) # q_cmd
     r = self.r_model.step(self.dt, r_cmd) # r_cmd
-    
+
     self.action_out = np.array([u, 0, 0, p, q, r])
+
+    return self.action_out
+
+
+  def step(self):
+    self.action_out = self.mimic_model()
 
     # Set input of point_model
     super().set_action(self.action_out)
     super().step()
 
-  def _loiter_vf(self, Yaw, n_vf, e_vf, Spd, Rd, Dir):
+  def _loiter_vf(self, n_vf, e_vf, Rd, Dir):
     pcl = 0.4
-    R2D = (180.0 / np.pi)
-    D2R = (np.pi / 180.0)
-    yawP = 1.0
-    yawI = 0.2
 
-    dir      = Dir / np.abs(Dir)
+    dirs     = Dir / np.abs(Dir)
     r_vf     = np.max((1.0, np.sqrt(n_vf*n_vf + e_vf*e_vf)))
     theta_vf = np.arctan2(e_vf, n_vf)
-    chicmd_vf= (theta_vf + dir * np.arctan2(pcl*r_vf, -(r_vf - Rd)))*R2D
-    if(chicmd_vf > 360.0):
-        chicmd_vf = chicmd_vf - 360.0
-    elif(chicmd_vf < 0.0):
-        chicmd_vf = chicmd_vf + 360.0
+    chicmd_vf= np.rad2deg(theta_vf + dirs * np.arctan2(pcl*r_vf, -(r_vf - Rd)))
+    chicmd_vf = np.remainder(chicmd_vf, 360.0)
+    # print("chi_c/yaw {:6.1f}/{:6.1f} : phiC/phi {:6.1f}/{:6.1f} | PQR {:6.3f}, {:6.3f}, {:6.3f}"
+    #   .format(chicmd_vf, yaw, np.rad2deg(phi_cmd)[0],self.att.as_euler('zyx',degrees=True)[2], self.action_out[3], self.action_out[4], self.action_out[5]))
+    # print('chi_c ',chicmd_vf, " / yaw ", yaw, 'eyaw ', eYaw, " -> phi_cmd/phi ",
+    #   np.rad2deg(phi_cmd),self.att.as_euler('zyx',degrees=True)[2], ' actionPQR ',np.rad2deg(self.action_out[3:]) )
+    return chicmd_vf
 
-    yaw = Yaw * R2D + 180.0
-    if (chicmd_vf > yaw):
-      if( np.abs(chicmd_vf - yaw) > np.abs(chicmd_vf - (yaw + 360.0)) ):
-        eYaw	= chicmd_vf - (yaw + 360.0)
-      else:
-        eYaw 	= chicmd_vf - yaw
-    else:
-      if( np.abs(chicmd_vf - yaw) > np.abs(chicmd_vf - (yaw - 360.0)) ):
-        eYaw 	= chicmd_vf - (yaw - 360.0)
-      else:
-        eYaw 	= chicmd_vf - yaw
-    
-    # print(r_vf, theta_vf, chicmd_vf, yaw, eYaw)
+  def _heading_ctrl(self, chi_cmd, Yaw):
+    yawP = 1.0
+    yawI = 0.2
+    yaw = np.remainder(np.rad2deg(Yaw) + 180, 360.0) # np.rad2deg(Yaw) + 180.0
+    eYaw = np.remainder(chi_cmd - yaw + 180.0, 360.0) - 180.0
+
     # Directional Control
     angleP = eYaw*yawP;  # Roll
     self._angleI = eYaw*yawI*self.dt + self._angleI; # Roll
@@ -142,24 +210,27 @@ class uav_model_wrapper(point_model):
     elif (sYaw < (-self.attr['phi_max'])):
         self._angleI = - angleP + (-self.attr['phi_max'])
     sYaw  = angleP + self._angleI
-    phi_cmd = sYaw * D2R
+    phi_cmd = np.deg2rad(sYaw)
 
+    return phi_cmd
+
+  def _get_omega_from_phi_cmd(self, phi_cmd, Spd):
     # Get Yawrate
-    omega = np.tan(phi_cmd) * 9.80665 / Spd
-    return [phi_cmd, omega]
+    omega = np.tan(phi_cmd) * 9.80665 / np.max((Spd,1.0))
 
+    return omega
 
 if __name__ == "__main__":
   D2R = np.pi / 180.0
   attr = dict()
-  attr['dt'] = 1/15.0
-  attr['attitude'] = np.array([15.0, 15.0, 180.0])
-  attr['position'] = np.array([50.0, 50.0, -20.0])
+  attr['dt'] = 1/7.5
+  attr['attitude'] = np.array([0.0, 0.0, 0.0])
+  attr['position'] = np.array([0.0, 0.0, 0.0])
   attr['u0'] = 20.0
 
-  action_in = np.array([27.7778, 0.0, 0.0, 0.0, 0.0, 0.0])
+  action_in = np.array([20.0, 0.0, 0.0, 0.0, 0.0, 0.0])
   # wp_in     = np.array([0.0, 0.0, -0.0, 13.88, 50.0, -1.0])
-  wp_in     = np.array([200.0, 0.0, -50.0, 27.7778, 100.0, -1.0])
+  wp_in     = np.array([500.0, 0.0, -50.0, 20.0, 100.0, 1.0])
 
   coyote1 = uav_model_wrapper(attr)
   time  = []
@@ -173,13 +244,14 @@ if __name__ == "__main__":
   yawrate=[]
   p     = []
   q     = []
-  for i in range(10000):
+  EndTime = 10.0
+  for i in range(int(EndTime / attr['dt'])):
     Time = i * attr['dt']
 
     # if (Time < 1.0):
-    #   action_in = np.array([27.7778, 0.0, 0.0, 45.0*D2R, 0.0, 0.0])
+    #   action_in = np.array([20.0, 0.0, 0.0, 45.0*D2R, 0.0, 0.0])
     # else:
-    #   action_in = np.array([27.7778, 0.0, 0.0, 0.0, 10.0*D2R, 10.0*D2R])
+    #   action_in = np.array([20.0, 0.0, 0.0, 0.0, 10.0*D2R, 10.0*D2R])
 
     # coyote1.set_raw_action(action_in)
     coyote1.set_wp_action(wp_in)
@@ -201,7 +273,7 @@ if __name__ == "__main__":
     q.append(         outputs[16])
     # print(Time,       outputs[0], outputs[1], -outputs[2],  outputs[3], outputs[4], outputs[5],
     #                   outputs[9], outputs[14], outputs[15], outputs[16])
-    if (Time >= 50.0):
+    if (Time >= EndTime):
       break
   print("Loop End")
   

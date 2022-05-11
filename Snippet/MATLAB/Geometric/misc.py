@@ -61,10 +61,11 @@ def pqr2eulerrate(pqr_in, att_in):
   phi = att[1]; theta = att[2]; psi = att[3]
 
   wB2Euler = np.array([
-    [1, 0,           -np.sin(theta)],
-    [0, np.cos(phi),  np.cos(theta)*np.sin(phi)],
-    [0,-np.sin(phi),  np.cos(theta)*np.cos(phi)]
+    [1, np.sin(phi)*np.tan(theta), np.cos(phi)*np.tan(theta)],
+    [0, np.cos(phi),              -np.sin(phi)],
+    [0, np.sin(phi)/np.cos(theta), np.cos(phi)/np.cos(theta)]
   ])
+    
   eulerrate = wB2Euler * pqr
 
   return eulerrate
@@ -81,9 +82,9 @@ def eulerrate2pqr(eulerrate_in, att_in):
   phi = att[1]; theta = att[2]; psi = att[3]
 
   Euler2wB = np.array([
-    [1, np.sin(phi)*np.tan(theta), np.cos(phi)*np.tan(theta)],
-    [0, np.cos(phi),              -np.sin(phi)],
-    [0, np.sin(phi)/np.cos(theta), np.cos(phi)/np.cos(theta)]
+    [1, 0,           -np.sin(theta)],
+    [0, np.cos(phi),  np.cos(theta)*np.sin(phi)],
+    [0,-np.sin(phi),  np.cos(theta)*np.cos(phi)]
   ])
   pqr = Euler2wB * eulerrate
 
@@ -123,8 +124,8 @@ def lla2flat(lla, lla_ref):
   Rn = Re / np.sqrt(1 - e2 * np.power(np.sin(lla_ref[0]),2.0))# Prime vertical
   Rm = Rn (1-e2) / (1 - e2 * np.power(np.sin(lla_ref[0]),2.0))# meridian
 
-  pN = (lla[0] - lla_ref[0]) * np.atan2(1, Rn)
-  pE = (lla[1] - lla_ref[1]) * np.atan2(1, Rm * np.cos(lla_ref[0]))
+  pN = (lla[0] - lla_ref[0]) / np.atan2(1, Rn)
+  pE = (lla[1] - lla_ref[1]) / np.atan2(1, Rm * np.cos(lla_ref[0]))
   pD =-(lla[2] - lla_ref[2]) 
 
   return [pN, pE, pD]
@@ -141,8 +142,8 @@ def flat2lla(pNED, lla_ref):
   Rn = Re / np.sqrt(1 - e2 * np.power(np.sin(lla_ref[0]),2.0))# Prime vertical
   Rm = Rn (1-e2) / (1 - e2 * np.power(np.sin(lla_ref[0]),2.0))# meridian
 
-  lat = lla_ref[0] + pNED[0] / np.atan2(1, Rn)
-  lon = lla_ref[1] + pNED[1] / np.atan2(1, Rm * np.cos(lla_ref[0]))
+  lat = lla_ref[0] + pNED[0] * np.atan2(1, Rn)
+  lon = lla_ref[1] + pNED[1] * np.atan2(1, Rm * np.cos(lla_ref[0]))
   alt = lla_ref[2] - pNED[2]
 
   return [lat, lon, alt]
