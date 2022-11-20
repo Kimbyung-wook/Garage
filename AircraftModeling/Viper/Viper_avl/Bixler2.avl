@@ -1,0 +1,314 @@
+Bixler2
+0.0                          | Mach
+0     0     0.0              | iYsym  iZsym  Zsym
+
+   0.259      0.179      1.510  | Sref   Cref   Bref
+# Note : check consistency of area unit above with length units of the file
+   0.000     0.000     0.000          | Xref   Yref   Zref
+ 0.00                        | CDp  (optional)
+
+
+
+#=================================================
+SURFACE                      | (keyword)
+Bixler2_Wing
+#Nchord    Cspace   [ Nspan Sspace ]
+15        1.0
+
+INDEX                        | (keyword)
+4539                          | Lsurf
+
+YDUPLICATE
+0.0
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   2.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.0000    0.0000    0.1950   0.000    7    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.2650    0.0000    0.1950   0.000    2    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+CONTROL
+aileron   57.2958   0.70   0.0  0.0   0.0  -1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0101    0.4300    0.0025    0.1850   0.000    2    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+CONTROL
+aileron   57.2958   0.70   0.0  0.0   0.0  -1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0201    0.5150    0.0037    0.1750   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+CONTROL
+aileron   57.2958   0.70   0.0  0.0   0.0  -1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0352    0.5800    0.0043    0.1600   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+CONTROL
+aileron   57.2958   0.70   0.0  0.0   0.0  -1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0505    0.6292    0.0124    0.1450   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0810    0.6762    0.0285    0.1150   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0975    0.6978    0.0404    0.1000   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.1200    0.7170    0.0557    0.0800   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.1303    0.7240    0.0624    0.0700   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.1676    0.7337    0.0726    0.0250   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Bixler2_MainWing.dat
+
+
+
+#=================================================
+SURFACE                      | (keyword)
+Bixler2_Elev
+#Nchord    Cspace   [ Nspan Sspace ]
+13        1.0
+
+INDEX                        | (keyword)
+4541                          | Lsurf
+
+YDUPLICATE
+0.0
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5700    0.0000   -0.0600    0.1050   0.000   12    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0015_H.dat
+CONTROL
+elevator    57.2958   0.62   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5700    0.1300   -0.0600    0.1000   0.000    2    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0015_H.dat
+CONTROL
+elevator    57.2958   0.63   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5750    0.1700   -0.0600    0.0900   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0015_H.dat
+CONTROL
+elevator    57.2958   0.64   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5800    0.1900   -0.0600    0.0850   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0015_H.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5900    0.2050   -0.0600    0.0800   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0015_H.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.6000    0.2150   -0.0600    0.0730   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0015_H.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.6080    0.2200   -0.0600    0.0670   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0015_H.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.6180    0.2250   -0.0600    0.0570   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0015_H.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.6300    0.2300   -0.0600    0.0400   0.000    1    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0015_H.dat
+
+
+
+#=================================================
+SURFACE                      | (keyword)
+Bixler2_Fin
+#Nchord    Cspace   [ Nspan Sspace ]
+13        1.0
+
+INDEX                        | (keyword)
+4542                          | Lsurf
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   0.6350   -0.0000    0.1100    0.0400   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010_V.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.6100   -0.0000    0.1000    0.0600   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010_V.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5950   -0.0000    0.0900    0.0750   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010_V.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5850   -0.0000    0.0800    0.0850   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010_V.dat
+CONTROL
+rudder    57.2958    0.75   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5700   -0.0000    0.0650    0.1000   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010_V.dat
+CONTROL
+rudder    57.2958    0.75   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5600   -0.0000    0.0500    0.1100   0.000    3    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010_V.dat
+CONTROL
+rudder    57.2958    0.75   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5500   -0.0000    0.0250    0.1200   0.000    5    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010_V.dat
+CONTROL
+rudder    57.2958    0.75   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5350   -0.0000   -0.0150    0.1350   0.000    3    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010_V.dat
+CONTROL
+rudder    57.2958    0.69   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5300   -0.0000   -0.0450    0.1400   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010_V.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5100    0.0000   -0.0600    0.1600   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010_V.dat
+
+
+

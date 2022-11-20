@@ -1,0 +1,79 @@
+
+************************
+*   List of Command Card
+************************
+TRIM
+DIM CM
+DAMP
+PART
+DERIV RAD
+
+**********************  
+*  Flight Conditions *
+**********************
+CASEID Aircraft Name: Flight Conditions, Body, Inertia, Wing, Flaps  
+
+ $FLTCON NMACH=1.0, MACH(1)=0.0206,
+         NALT=1.0,ALT(1)=200.0,
+         NALPHA=12.0,
+         ALSCHD(1)=-8.0,-4.0,-2.0,0.0,2.0,4.0,8.0,12.0,14.0,16.0,18.0,20.0,
+         GAMMA=0.0, LOOP=2.0$
+
+ $SYNTHS XCG=45.0,ZCG=0.0,
+         XW=39.3, ZW=0.5,ALIW=3.0,
+         XH=121.5,ZH=2.0,ALIH=0.0, 
+		 XV=116.5,ZV=0.0,
+		 XVF=110.0,ZVF=0.0$
+	
+ $BODY   NX=16.,
+         X(1)= 0.0, 3.5, 9.5, 13.5, 17.5, 21.5, 25.5, 29.5, 33.5,
+		 37.5, 47.0, 65.5, 75.5, 85.0, 103.5, 132.5,
+		 R(1)= 0.0, 2.0, 3.16, 3.8,  4.37, 4.83, 5.04, 5.26, 5.41,
+		 5.26, 4.9, 4.06, 4.04, 3.59,  2.82,  2.08,
+		 ZU(1)= 0.0, 2.0, 3.8,  4.5,  4.69, 5.14, 5.43, 5.71, 6.06,
+		 6.17, 5.94, 5.14, 4.57, 4.29,  3.77,  1.43,
+		 ZL(1)= 0.0, -2.0, -4.3,  -5.3,  -5.43, -6.74, -7.31, -7.71, -8.00,
+		 -8.07, -7.43, -4.86, -3.54, -2.86,  -2.17,  -1.66$
+
+ $WGPLNF CHRDR=26.6,CHRDTP=6.0,CHRDBP=26.6,SSPN=129.,SSPNOP=17.5,
+		 DHDADI=0.0,DHDADO=30.0,CHSTAT=0.,TWISTA=0.0,SSPNDD=17.5,TYPE=1.0,
+		 SSPNE=124.,SAVSI=0.0,SAVSO=45.0 $
+		
+
+* $WGPLNF  CHRDR=26.6,CHRDTP=6.6,CHRDBP=26.6,SSPN=116.0,SSPNOP=18.0,
+*         DHDADI=0.,DHDADO=40.,CHSTAT=0.0,TWISTA=0.,SSPNDD=18.0,TYPE=1.,
+*         SSPNE=111.0,SAVSI=0.,SAVSO=50.$
+		 
+
+SAVE
+NEXT CASE		 
+
+CASEID Aircraft Name: Ailerons
+
+NACA-W-4-2408
+ $ASYFLP STYPE=4.0, NDELTA=7.0,DELTAL(1)=-15.0,-10.0,-5.0,0.0,5.0,10.0,15.0,
+         DELTAR(1)= 15.0, 10.0, 5.0,0.0,-5.0,-10.0,-15.0,
+		 SPANFI=60.3, SPANFO=110.9,PHETE=0.0211,CHRDFI=5.8, CHRDFO=5.1$
+SAVE
+NEXT CASE	
+
+CASEID Aircraft Name: Horizontal Tail, Vertical Tail, Elevator
+
+NACA-H-4-0006
+ $HTPLNF CHRDR=14.0,CHRDTP=11.0,SAVSI=5.,SSPN=30.0,SSPNE=29.0,
+         CHSTAT=0.25,TYPE=1.0$
+		 
+NACA-V-4-0008
+NACA-F-4-0008
+ $VTPLNF CHRDTP=11.0, CHRDR=27.0, SSPN=36.5, SSPNE=33.5,  
+         SAVSI=20.0, CHSTAT=0.25, TYPE=1.0$
+ $SYMFLP FTYPE=1.,NDELTA=9.0,
+         DELTA(1)=-25.0,-15.0,-10.0,-5.0,0.0,5.0,10.0,15.0,25.0
+         SPANFI=0.0,SPANFO=37.0,CHRDFI=8.5,CHRDFO=5.0$
+ $VFPLNF CHRDTP=0.0, SSPNE=6.5, SSPN=9.5, CHRDR=9.0,
+          SAVSI=50.0, CHSTAT=0.25, TYPE=1.0$
+ 
+
+
+	
+	

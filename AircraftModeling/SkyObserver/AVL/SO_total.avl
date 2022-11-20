@@ -1,0 +1,300 @@
+# 
+# Note : check consistency of area unit and length units in this file
+# Note : check consistency with inertia units of the .mass file
+# 
+# 
+Sky_Observer
+0.0                          | Mach
+0     0     0.0              | iYsym  iZsym  Zsym
+
+   0.436      0.242      1.860  | Sref   Cref   Bref
+   0.090    -0.000    -0.090          | Xref   Yref   Zref
+ 0.03                        | CDp  (optional)
+
+
+
+
+#=============================================
+BODY
+Fuselage
+100   1.0
+
+TRANSLATE
+0.970 0.0 0.0
+
+
+SCALE            |  (keyword)
+-1.0 1.0 1.0    | Xscale  Yscale  Zscale
+
+BFIL
+SO_Body.dat
+
+#=============================================
+BODY
+Fuselage
+100   1.0
+
+TRANSLATE
+-0.250 0.0 -0.200
+
+
+SCALE            |  (keyword)
+0.0055  0.0055  0.0055    | Xscale  Yscale  Zscale
+
+BFIL
+SO_Cabin.dat
+
+#=================================================
+SURFACE                      | (keyword)
+Main Wing
+#Nchord    Cspace   [ Nspan Sspace ]
+11        1.0
+
+INDEX                        | (keyword)
+1960                          | Lsurf
+
+YDUPLICATE
+0.0
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   2.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.0000    0.0000    0.2700   0.000    6    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Main_Wing.dat
+#CONTROL                                                     | FLAP
+#flap        57.2958    0.81       0.0      1.0     0.0  1.0 | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.2600    0.0000    0.2700   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Main_Wing.dat
+#CONTROL                                                     | FLAP
+#flap        57.2958    0.81       0.0      1.0     0.0  1.0 | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0020    0.3100   -0.0001    0.2630   0.000   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Main_Wing.dat
+CONTROL                                                     | AILERON
+aileron     57.2958    0.81       0.0      1.0     0.0 -1.0 | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+CONTROL                                                     | FLAP
+flap        57.2958    0.81       0.0      1.0     0.0  1.0 | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0180    0.8300   -0.0006    0.1970   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Main_Wing.dat
+CONTROL                                                     | AILERON
+aileron     57.2958    0.77       0.0      1.0     0.0 -1.0 | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+CONTROL                                                     | FLAP
+flap        57.2958    0.77       0.0      1.0     0.0  1.0 | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0200    0.8700   -0.0007    0.1900   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Main_Wing.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0801    0.8995    0.0024    0.1300   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Main_Wing.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.2002    0.9291    0.0034    0.0100   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+Main_Wing.dat
+
+
+
+#=================================================
+SURFACE                      | (keyword)
+Elevator
+#Nchord    Cspace   [ Nspan Sspace ]
+11        1.0
+
+INDEX                        | (keyword)
+1960                          | Lsurf
+
+YDUPLICATE
+0.0
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   0.9250    0.0000    0.0000    0.1550   0.000   17    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+CONTROL                                                     | AILERON
+elevator    57.2958    0.77       0.0      1.0     0.0  1.0 | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+#______________
+SECTION                                                     |  (keyword)
+   0.9510    0.2370    0.0000    0.1290   0.000    2    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+CONTROL                                                     | AILERON
+elevator    57.2958    0.73       0.0      1.0     0.0  1.0 | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+#______________
+SECTION                                                     |  (keyword)
+   0.9550    0.2700    0.0000    0.1250   0.000    2    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   1.0700    0.3000    0.0000    0.0100   0.000    2    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+
+
+
+#=================================================
+SURFACE                      | (keyword)
+Fin
+#Nchord    Cspace   [ Nspan Sspace ]
+11        1.0
+
+INDEX                        | (keyword)
+1960                          | Lsurf
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   1.0200    0.0000    0.2900    0.0100   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.8900    0.0000    0.2700    0.1350   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.8830    0.0000    0.2600    0.1400   0.000   16    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+CONTROL                                                     | FLAP
+rudder       -57.2958    0.74       0.0      0.0     1.0 -1.0 | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+#______________
+SECTION                                                     |  (keyword)
+   0.7240    0.0000    0.0400    0.2460   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+CONTROL                                                     | FLAP
+rudder       -57.2958    0.82       0.0      1.0     1.0 -1.0 | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+#______________
+SECTION                                                     |  (keyword)
+   0.7100    0.0000    0.0200    0.2550   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.7100    0.0000    0.0000    0.2550   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+
+#=================================================
+SURFACE                      | (keyword)
+Fin
+#Nchord    Cspace   [ Nspan Sspace ]
+11        1.0
+
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.0000   -0.0000    0.2300   0.000    3    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.0000   -0.0500    0.2300   0.000    3    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.0000   -0.1000    0.2300   0.000    3    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.0000   -0.1500    0.2300   0.000    3    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0004.dat
+
+
+

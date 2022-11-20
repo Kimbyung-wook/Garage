@@ -71,7 +71,7 @@ class guidance_l1():
     target_pos[2] = 0.0
     my_pos[2] = 0.0
     my_vel[2] = 0.0
-    an_cmd = self.step_tracking(target_pos, my_pos, my_vel)
+    an_cmd = self.run_tracking(target_pos, my_pos, my_vel)
     return [an_cmd[0], an_cmd[1]]
 
   def run_loitering(self, target_pos, my_pos, my_vel):
@@ -117,7 +117,7 @@ class guidance_l1():
     target_pos[2] = 0.0
     my_pos[2] = 0.0
     my_vel[2] = 0.0
-    an_cmd = self.step_loitering(target_pos, my_pos, my_vel)
+    an_cmd = self.run_loitering(target_pos, my_pos, my_vel)
     return [an_cmd[0], an_cmd[1]]
 class guidance_vf_loiter():
   def __init__(self):

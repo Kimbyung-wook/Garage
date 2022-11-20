@@ -1,0 +1,193 @@
+AMSR_Viper20160110
+0.0                          | Mach
+0     0     0.0              | iYsym  iZsym  Zsym
+
+   0.600      0.382      1.664  | Sref   Cref   Bref
+# Note : check consistency of area unit above with length units of the file
+   0.195     0.000     0.100          | Xref   Yref   Zref
+ 0.00                        | CDp  (optional)
+
+
+
+#=================================================
+SURFACE                      | (keyword)
+Viper without Body_Wing
+#Nchord    Cspace   [ Nspan Sspace ]
+11        1.0
+
+INDEX                        | (keyword)
+3854                          | Lsurf
+
+YDUPLICATE
+0.0
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.0000    0.1000    0.4800   0.000    1    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0009.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.0520    0.1000    0.4800   0.000    1    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0009.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0100    0.0870    0.1000    0.4690   0.000   10    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0009.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.1990    0.7820    0.1000    0.2540   0.000    1    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0009.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.3500    0.8170    0.1000    0.1000   0.000    1    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0009.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.4390    0.8320    0.1000    0.0100   0.000    1    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0009.dat
+
+
+
+#=================================================
+SURFACE                      | (keyword)
+Viper without Body_Elev
+#Nchord    Cspace   [ Nspan Sspace ]
+11        1.0
+
+INDEX                        | (keyword)
+3856                          | Lsurf
+
+YDUPLICATE
+0.0
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   0.9600    0.0000    0.1000    0.2450   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.9600    0.0150    0.1000    0.2450   0.000    7    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010.dat
+CONTROL
+elevator    57.2958   0.45   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   1.0090    0.2650    0.1000    0.1750   0.000    2    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010.dat
+CONTROL
+elevator    57.2958   0.40   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   1.0250    0.3450    0.1000    0.1500   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010.dat
+CONTROL
+elevator    57.2958   0.0   0.0  0.0  0.0   1.0
+
+#______________
+SECTION                                                     |  (keyword)
+   1.1630    0.3500    0.1000    0.0100   0.000    1    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0010.dat
+CONTROL
+elevator    57.2958   0.0   0.0  0.0  0.0   1.0
+
+
+
+#=================================================
+SURFACE                      | (keyword)
+Viper without Body_Fin
+#Nchord    Cspace   [ Nspan Sspace ]
+11        1.0
+
+INDEX                        | (keyword)
+3857                          | Lsurf
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   1.0820   -0.0000    0.3150    0.1770   0.000    3    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0006.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   1.0420   -0.0000    0.2650    0.2340   0.000    6    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0006.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.9700   -0.0000    0.1750    0.3350   0.000   12    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0006.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.8300    0.0000    0.0000    0.5360   0.000   12    0   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+NACA0006.dat
+
+
+
