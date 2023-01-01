@@ -30,13 +30,13 @@ class OLED{
     
 
   public : // Variables
-    void setup_display();
+    int setup_display();
     void writeln(int line_in, char* text_in, unsigned int size_in);
     void print();
 
   public:
     char msg[DISP_LINE_COLUMN][DISP_LINE_ROW];
-    Tictok_us health_print;
+    Tictok_us perform_print;
 
   private:
     Adafruit_SSD1306 display_device;

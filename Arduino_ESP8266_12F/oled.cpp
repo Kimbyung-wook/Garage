@@ -10,21 +10,22 @@ OLED::OLED()
   // memcpy(msg[0],'\0',DISP_LINE_ROW*DISP_LINE_COLUMN);
 }
 
-void OLED::setup_display()
+int OLED::setup_display()
 { /************************************/
   // Display Settings
   /************************************/
   display_device.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
   display_device.clearDisplay();
-  delay(50);
+  delay(100);
 
   display_device.setTextSize(1);             // Normal 1:1 pixel scale
   display_device.setTextColor(SSD1306_WHITE);        // Draw white text
   display_device.setCursor(0,0);             // Start at top-left corner
   display_device.println(F("Display Initialize"));
 
-  delay(50);
+  delay(100);
   display_device.display();
+  return true;
 }
 
 // void OLED::writeln(int line_in, char* text_in, unsigned int size_in){
@@ -35,7 +36,7 @@ void OLED::setup_display()
 
 void OLED::print()
 {
-  health_print.tic();
+  perform_print.tic();
   /************************************/
   // Display Settings
   /************************************/
@@ -46,5 +47,5 @@ void OLED::print()
   }
   display_device.display();
 
-  health_print.toc();
+  perform_print.toc();
 }

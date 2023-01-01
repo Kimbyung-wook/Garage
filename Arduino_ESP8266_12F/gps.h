@@ -10,12 +10,12 @@ public:
   ~GPS();
 
 public:
-  void setup_gps();
+  int setup_gps();
   int read_all();
 
 public:
   Adafruit_GPS* gps_device;
-  Tictok_us health_read;
+  Tictok_us perform_read;
 
 private:
   int gps_connection;
