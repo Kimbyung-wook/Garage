@@ -1,3 +1,6 @@
+//***************************************************************//
+// Originated from https://daru-daru.tistory.com/70
+//***************************************************************//
 #pragma once
 #include "Hunter.h"
 #include "singleton.hpp"
