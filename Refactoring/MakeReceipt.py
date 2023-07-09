@@ -23,26 +23,31 @@ def statement(invoice, plays):
             assert True, "Unknown genre : {:s}".format(playFor(aPerformance)['type'])
         return result
 
-    def volumeCreditFor(perf):
+    def volumeCreditFor(aPerformance):
         result = 0
         # accumulating point
-        result += max([perf['audience'] - 30, 0])
+        result += max([aPerformance['audience'] - 30, 0])
 
         # give additional point per each 5 peoples
-        if "comedy" == playFor(perf)['type'] :
-            result += math.floor(perf['audience'] / 5)
+        if "comedy" == playFor(aPerformance)['type'] :
+            result += math.floor(aPerformance['audience'] / 5)
         return result
 
+    def usd(aNumber):
+        return aNumber/100
+
     totalAmount = 0
-    volumeCredits = 0
     result = "bills (Name : {:s})\n".format(invoice['customer'])
     for perf in invoice['performances']:
-        volumeCredits += volumeCreditFor(perf)
-
         # show bills
-        result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(playFor(perf)['name'], amountFor(perf)/100, perf['audience']) 
+        result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(playFor(perf)['name'], usd(amountFor(perf)), perf['audience']) 
         totalAmount += amountFor(perf)
-    result += "Total : $ {:.2f}\n".format(totalAmount/100)
+
+    volumeCredits = 0
+    for perf in invoice['performances']:
+        volumeCredits += volumeCreditFor(perf)
+        
+    result += "Total : $ {:.2f}\n".format(usd(totalAmount))
     result += "Accumulated point : {:.0f} points\n".format(volumeCredits)
     print(result)
     return result
