@@ -27,18 +27,17 @@ def statement(invoice, plays):
     volumeCredits = 0
     result = "bills (Name : {:s})\n".format(invoice['customer'])
     for perf in invoice['performances']:
-        PLAY = playFor(perf)
-        thisAmount = amountFor(perf, PLAY)
+        thisAmount = amountFor(perf, playFor(perf))
 
         # accumulating point
         volumeCredits += max([perf['audience'] - 30, 0])
 
         # give additional point per each 5 peoples
-        if "comedy" == PLAY['type'] :
+        if "comedy" == playFor(perf)['type'] :
             volumeCredits += math.floor(perf['audience'] / 5)
 
         # show bills
-        result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(PLAY['name'], thisAmount/100, perf['audience']) 
+        result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(playFor(perf)['name'], thisAmount/100, perf['audience']) 
         totalAmount += thisAmount
     result += "Total : $ {:.2f}\n".format(totalAmount/100)
     result += "Accumulated point : {:.0f} points\n".format(volumeCredits)
