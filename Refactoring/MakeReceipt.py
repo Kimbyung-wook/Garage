@@ -39,13 +39,13 @@ def statement(invoice, plays):
 
         def getTotalVolumeCredits():
             result = 0
-            for perf in invoice['performances']:
+            for perf in statementData['performances']:
                 result += volumeCreditFor(perf)
             return result
 
         def getTotalAmount():
             result = 0
-            for perf in invoice['performances']:
+            for perf in statementData['performances']:
                 result += amountFor(perf)
             return result
 
