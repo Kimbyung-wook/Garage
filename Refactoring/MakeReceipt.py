@@ -4,27 +4,30 @@ import pprint
 
 def statement(invoice, plays):
 
-    def amountFor(perf, PLAY):
-        thisAmount = 0
+    def amountFor(aPerformance, PLAY):
+        result = 0
 
         if PLAY['type'] == "tragedy":
-            thisAmount = 40000
-            if perf['audience'] > 30:
-                thisAmount += 1000 * (perf['audience'] - 30)
+            result = 40000
+            if aPerformance['audience'] > 30:
+                result += 1000 * (aPerformance['audience'] - 30)
         elif PLAY['type'] == "comedy":
-            thisAmount = 30000
-            if perf['audience'] > 20:
-                thisAmount += 10000 + 500 * (perf['audience'] - 20)
-            thisAmount += 300 * perf['audience']
+            result = 30000
+            if aPerformance['audience'] > 20:
+                result += 10000 + 500 * (aPerformance['audience'] - 20)
+            result += 300 * aPerformance['audience']
         else:
             assert True, "Unknown genre : {:s}".format(PLAY['type'])
-        return thisAmount
+        return result
+
+    def playFor(aPerformance):
+        return plays[aPerformance['playID']]
 
     totalAmount = 0
     volumeCredits = 0
     result = "bills (Name : {:s})\n".format(invoice['customer'])
     for perf in invoice['performances']:
-        PLAY = plays[perf['playID']]
+        PLAY = playFor(perf)
         thisAmount = amountFor(perf, PLAY)
 
         # accumulating point
