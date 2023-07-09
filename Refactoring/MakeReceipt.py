@@ -36,6 +36,13 @@ def statement(invoice, plays):
     def usd(aNumber):
         return aNumber/100
 
+    def totalVolumeCredits():
+        volumeCredits = 0
+        for perf in invoice['performances']:
+            volumeCredits += volumeCreditFor(perf)
+        return volumeCredits
+
+
     totalAmount = 0
     result = "bills (Name : {:s})\n".format(invoice['customer'])
     for perf in invoice['performances']:
@@ -43,12 +50,9 @@ def statement(invoice, plays):
         result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(playFor(perf)['name'], usd(amountFor(perf)), perf['audience']) 
         totalAmount += amountFor(perf)
 
-    volumeCredits = 0
-    for perf in invoice['performances']:
-        volumeCredits += volumeCreditFor(perf)
-        
+
     result += "Total : $ {:.2f}\n".format(usd(totalAmount))
-    result += "Accumulated point : {:.0f} points\n".format(volumeCredits)
+    result += "Accumulated point : {:.0f} points\n".format(totalVolumeCredits())
     print(result)
     return result
         
