@@ -23,17 +23,21 @@ def statement(invoice, plays):
             assert True, "Unknown genre : {:s}".format(playFor(aPerformance)['type'])
         return result
 
+    def volumeCreditFor(perf):
+        result = 0
+        # accumulating point
+        result += max([perf['audience'] - 30, 0])
+
+        # give additional point per each 5 peoples
+        if "comedy" == playFor(perf)['type'] :
+            result += math.floor(perf['audience'] / 5)
+        return result
+
     totalAmount = 0
     volumeCredits = 0
     result = "bills (Name : {:s})\n".format(invoice['customer'])
     for perf in invoice['performances']:
-        
-        # accumulating point
-        volumeCredits += max([perf['audience'] - 30, 0])
-
-        # give additional point per each 5 peoples
-        if "comedy" == playFor(perf)['type'] :
-            volumeCredits += math.floor(perf['audience'] / 5)
+        volumeCredits += volumeCreditFor(perf)
 
         # show bills
         result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(playFor(perf)['name'], amountFor(perf)/100, perf['audience']) 
