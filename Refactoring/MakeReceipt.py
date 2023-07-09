@@ -6,23 +6,23 @@ def statement(invoice, plays):
     def playFor(aPerformance):
         return plays[aPerformance['playID']]
 
+    def amountFor(aPerformance):
+        result = 0
+
+        if aPerformance['play']['type'] == "tragedy":
+            result = 40000
+            if aPerformance['audience'] > 30:
+                result += 1000 * (aPerformance['audience'] - 30)
+        elif aPerformance['play']['type'] == "comedy":
+            result = 30000
+            if aPerformance['audience'] > 20:
+                result += 10000 + 500 * (aPerformance['audience'] - 20)
+            result += 300 * aPerformance['audience']
+        else:
+            assert True, "Unknown genre : {:s}".format(aPerformance['play']['type'])
+        return result
+
     def renderPlainText(statementData, plays):
-
-        def amountFor(aPerformance):
-            result = 0
-
-            if aPerformance['play']['type'] == "tragedy":
-                result = 40000
-                if aPerformance['audience'] > 30:
-                    result += 1000 * (aPerformance['audience'] - 30)
-            elif aPerformance['play']['type'] == "comedy":
-                result = 30000
-                if aPerformance['audience'] > 20:
-                    result += 10000 + 500 * (aPerformance['audience'] - 20)
-                result += 300 * aPerformance['audience']
-            else:
-                assert True, "Unknown genre : {:s}".format(aPerformance['play']['type'])
-            return result
 
         def volumeCreditFor(aPerformance):
             result = 0
@@ -46,7 +46,7 @@ def statement(invoice, plays):
         def getTotalAmount():
             result = 0
             for perf in statementData['performances']:
-                result += amountFor(perf)
+                result += perf['amount']
             return result
 
         result = "bills (Name : {:s})\n".format(statementData['customer'])
@@ -55,7 +55,7 @@ def statement(invoice, plays):
             # show bills
             # print(perf)
             # print(playFor(perf))
-            result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(perf['play']['name'], usd(amountFor(perf)), perf['audience']) 
+            result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(perf['play']['name'], usd(perf['amount']), perf['audience']) 
 
         result += "Total : $ {:.2f}\n".format(usd(getTotalAmount()))
         result += "Accumulated point : {:.0f} points\n".format(getTotalVolumeCredits())
@@ -65,6 +65,7 @@ def statement(invoice, plays):
     def enrichPerformance(aPerformance):
         result = aPerformance
         for res in result: res['play'] = playFor(res)
+        for res in result: res['amount'] = amountFor(res)
         return result
 
     # Main loop 
