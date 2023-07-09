@@ -44,31 +44,13 @@ def statement(invoice, plays):
             result += perf['amount']
         return result
 
-    def renderPlainText(statementData):
-
-        def usd(aNumber):
-            return aNumber/100
-
-        result = "bills (Name : {:s})\n".format(statementData['customer'])
-
-        for perf in statementData['performances']:
-            # show bills
-            # print(perf)
-            # print(playFor(perf))
-            result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(perf['play']['name'], usd(perf['amount']), perf['audience']) 
-
-        result += "Total : $ {:.2f}\n".format(usd(getTotalAmount(statementData)))
-        result += "Accumulated point : {:.0f} points\n".format(getTotalVolumeCredits(statementData))
-        print(result)
-        return result
-    
     def enrichPerformance(aPerformance):
         result = aPerformance
-        for res in result: res['play'] = playFor(res)
-        for res in result: res['amount'] = amountFor(res)
+        for res in result: res['play']  = playFor(res)
+        for res in result: res['amount']= amountFor(res)
         return result
 
-    def createStatementData(invoice, plays):
+    def createStatementData(invoice):
         STATEMENTDATA = {}
         STATEMENTDATA['customer']           = invoice['customer']
         STATEMENTDATA['performances']       = enrichPerformance(invoice['performances'])
@@ -76,9 +58,21 @@ def statement(invoice, plays):
         STATEMENTDATA['totalVolumeCredits'] = getTotalVolumeCredits(STATEMENTDATA)
         return STATEMENTDATA
 
+    def renderPlainText(statementData):
+        def usd(aNumber):
+            return aNumber/100
+
+        result = "bills (Name : {:s})\n".format(statementData['customer'])
+
+        for perf in statementData['performances']:
+            result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(perf['play']['name'], usd(perf['amount']), perf['audience']) 
+
+        result += "Total : $ {:.2f}\n".format(                  usd(statementData['totalAmount']))
+        result += "Accumulated point : {:.0f} points\n".format(statementData['totalVolumeCredits'])
+        return result
 
     # Main loop 
-    STATEMENTDATA = createStatementData(invoice, plays)
+    STATEMENTDATA = createStatementData(invoice)
     return renderPlainText(STATEMENTDATA)
 
 def openJSON(fileName:str):
@@ -92,6 +86,7 @@ if __name__ == "__main__":
     invoices = openJSON('invoices.json')
     plays = openJSON("plays.json")
     receipt_text = statement(invoice=invoices, plays=plays)
+    print(receipt_text)
     with open('result.txt','w') as f:
         f.write(receipt_text)
         f.close
