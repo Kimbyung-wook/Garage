@@ -22,32 +22,32 @@ def statement(invoice, plays):
             assert True, "Unknown genre : {:s}".format(aPerformance['play']['type'])
         return result
 
-    def renderPlainText(statementData, plays):
+    def volumeCreditFor(aPerformance):
+        result = 0
+        # accumulating point
+        result += max([aPerformance['audience'] - 30, 0])
 
-        def volumeCreditFor(aPerformance):
-            result = 0
-            # accumulating point
-            result += max([aPerformance['audience'] - 30, 0])
+        # give additional point per each 5 peoples
+        if "comedy" == playFor(aPerformance)['type'] :
+            result += math.floor(aPerformance['audience'] / 5)
+        return result
 
-            # give additional point per each 5 peoples
-            if "comedy" == playFor(aPerformance)['type'] :
-                result += math.floor(aPerformance['audience'] / 5)
-            return result
+    def getTotalVolumeCredits(statementData):
+        result = 0
+        for perf in statementData['performances']:
+            result += volumeCreditFor(perf)
+        return result
+
+    def getTotalAmount(statementData):
+        result = 0
+        for perf in statementData['performances']:
+            result += perf['amount']
+        return result
+
+    def renderPlainText(statementData):
 
         def usd(aNumber):
             return aNumber/100
-
-        def getTotalVolumeCredits():
-            result = 0
-            for perf in statementData['performances']:
-                result += volumeCreditFor(perf)
-            return result
-
-        def getTotalAmount():
-            result = 0
-            for perf in statementData['performances']:
-                result += perf['amount']
-            return result
 
         result = "bills (Name : {:s})\n".format(statementData['customer'])
 
@@ -57,8 +57,8 @@ def statement(invoice, plays):
             # print(playFor(perf))
             result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(perf['play']['name'], usd(perf['amount']), perf['audience']) 
 
-        result += "Total : $ {:.2f}\n".format(usd(getTotalAmount()))
-        result += "Accumulated point : {:.0f} points\n".format(getTotalVolumeCredits())
+        result += "Total : $ {:.2f}\n".format(usd(getTotalAmount(statementData)))
+        result += "Accumulated point : {:.0f} points\n".format(getTotalVolumeCredits(statementData))
         print(result)
         return result
     
@@ -68,12 +68,18 @@ def statement(invoice, plays):
         for res in result: res['amount'] = amountFor(res)
         return result
 
+    def createStatementData(invoice, plays):
+        STATEMENTDATA = {}
+        STATEMENTDATA['customer']           = invoice['customer']
+        STATEMENTDATA['performances']       = enrichPerformance(invoice['performances'])
+        STATEMENTDATA['totalAmount']        = getTotalAmount(STATEMENTDATA)
+        STATEMENTDATA['totalVolumeCredits'] = getTotalVolumeCredits(STATEMENTDATA)
+        return STATEMENTDATA
+
+
     # Main loop 
-    STATEMENTDATA = {}
-    STATEMENTDATA['customer']       = invoice['customer']
-    STATEMENTDATA['performances']   = enrichPerformance(invoice['performances'])
-    # print(STATEMENTDATA['performances'])
-    return renderPlainText(STATEMENTDATA, plays)
+    STATEMENTDATA = createStatementData(invoice, plays)
+    return renderPlainText(STATEMENTDATA)
 
 def openJSON(fileName:str):
     with open(fileName) as f:
