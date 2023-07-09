@@ -3,11 +3,8 @@ import math
 import pprint
 
 def statement(invoice, plays):
-    totalAmount = 0
-    volumeCredits = 0
-    result = "bills (Name : {:s})\n".format(invoice['customer'])
-    for perf in invoice['performances']:
-        PLAY = plays[perf['playID']]
+
+    def amountFor(perf, PLAY):
         thisAmount = 0
 
         if PLAY['type'] == "tragedy":
@@ -21,8 +18,18 @@ def statement(invoice, plays):
             thisAmount += 300 * perf['audience']
         else:
             assert True, "Unknown genre : {:s}".format(PLAY['type'])
+        return thisAmount
+
+    totalAmount = 0
+    volumeCredits = 0
+    result = "bills (Name : {:s})\n".format(invoice['customer'])
+    for perf in invoice['performances']:
+        PLAY = plays[perf['playID']]
+        thisAmount = amountFor(perf, PLAY)
+
         # accumulating point
         volumeCredits += max([perf['audience'] - 30, 0])
+
         # give additional point per each 5 peoples
         if "comedy" == PLAY['type'] :
             volumeCredits += math.floor(perf['audience'] / 5)
@@ -33,6 +40,8 @@ def statement(invoice, plays):
     result += "Total : $ {:.2f}\n".format(totalAmount/100)
     result += "Accumulated point : {:.0f} points\n".format(volumeCredits)
     print(result)
+    return result
+        
 
 def openJSON(fileName:str):
     with open(fileName) as f:
@@ -44,4 +53,7 @@ if __name__ == "__main__":
     # Read json files
     invoices = openJSON('invoices.json')
     plays = openJSON("plays.json")
-    statement(invoice=invoices, plays=plays)
+    receipt_text = statement(invoice=invoices, plays=plays)
+    with open('result.txt','w') as f:
+        f.write(receipt_text)
+        f.close

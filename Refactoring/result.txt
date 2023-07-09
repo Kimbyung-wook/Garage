@@ -1,0 +1,6 @@
+bills (Name : BigCo)
+	Hamlet          : $  650.00 ( 55 Seats)
+	As You Like It  : $  580.00 ( 35 Seats)
+	Othello         : $  500.00 ( 40 Seats)
+Total : $ 1730.00
+Accumulated point : 47 points
