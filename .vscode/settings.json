@@ -1,5 +1,14 @@
 {
     "files.associations": {
-        "exception": "cpp"
-    }
+        "exception": "cpp",
+        "random": "cpp",
+        "optional": "cpp",
+        "system_error": "cpp",
+        "array": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
+    },
+    "python.pythonPath": "C:\\Users\\bw\\.conda\\envs\\qt\\python.exe"
 }

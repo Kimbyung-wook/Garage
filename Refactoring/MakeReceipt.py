@@ -28,7 +28,7 @@ def statement(invoice, plays):
             volumeCredits += math.floor(perf['audience'] / 5)
 
         # show bills
-        result += "\t{:15s} : $ {:7.2f} (Seats {:3d})\n".format(PLAY['name'], thisAmount/100, perf['audience']) 
+        result += "\t{:15s} : $ {:7.2f} ({:3d} Seats)\n".format(PLAY['name'], thisAmount/100, perf['audience']) 
         totalAmount += thisAmount
     result += "Total : $ {:.2f}\n".format(totalAmount/100)
     result += "Accumulated point : {:.0f} points\n".format(volumeCredits)
