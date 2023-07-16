@@ -6,49 +6,54 @@ def statement(invoice, plays):
     class PerformanceCalculator():
         def __init__(self, aPerformance, aPlay):
             self._performance = aPerformance
-            self._play = aPlay
-            pprint.pprint(self._performance)
-            pprint.pprint(self._play)
-            self.play = dict()
+            self._aplay = aPlay
+            self._play = dict()
+            self._amount = list()
+            self._volumeCredits = list()
 
-        def update(self):
+        def play(self):
             for idx in range(len(self._performance)):
-                self.play[idx] = playFor(self._performance[idx])
+                self._play[idx] = playFor(self._performance[idx])
+            return self._play
+
+        def amount(self):
+            for idx in range(len(self._performance)):
+                result = 0
+                if self._aplay[idx]['type'] == "tragedy":
+                    result = 40000
+                    if self._performance[idx]['audience'] > 30:
+                        result += 1000 * (self._performance[idx]['audience'] - 30)
+                elif self._aplay[idx]['type'] == "comedy":
+                    result = 30000
+                    if self._performance[idx]['audience'] > 20:
+                        result += 10000 + 500 * (self._performance[idx]['audience'] - 20)
+                    result += 300 * self._performance[idx]['audience']
+                else:
+                    assert True, "Unknown genre : {:s}".format(self._aplay[idx]['type'])
+                self._amount.append(result)
+            return self._amount
+        
+        def volumeCredit(self):
+            for idx in range(len(self._performance)):
+                result = 0
+                # accumulating point
+                result += max([self._performance[idx]['audience'] - 30, 0])
+
+                # give additional point per each 5 peoples
+                if "comedy" == self._aplay[idx]['type'] :
+                    result += math.floor(self._performance[idx]['audience'] / 5)
+                self._volumeCredits.append(result)
+            return self._volumeCredits
 
     def playFor(aPerformance):
         return plays[aPerformance['playID']]
 
     def amountFor(aPerformance):
-        result = 0
-
-        if aPerformance['play']['type'] == "tragedy":
-            result = 40000
-            if aPerformance['audience'] > 30:
-                result += 1000 * (aPerformance['audience'] - 30)
-        elif aPerformance['play']['type'] == "comedy":
-            result = 30000
-            if aPerformance['audience'] > 20:
-                result += 10000 + 500 * (aPerformance['audience'] - 20)
-            result += 300 * aPerformance['audience']
-        else:
-            assert True, "Unknown genre : {:s}".format(aPerformance['play']['type'])
-        return result
+        return PerformanceCalculator(aPerformance, [playFor(res) for res in aPerformance]).amount()
 
     def volumeCreditFor(aPerformance):
-        result = 0
-        # accumulating point
-        result += max([aPerformance['audience'] - 30, 0])
+        return PerformanceCalculator(aPerformance, [playFor(res) for res in aPerformance]).volumeCredit()
 
-        # give additional point per each 5 peoples
-        if "comedy" == playFor(aPerformance)['type'] :
-            result += math.floor(aPerformance['audience'] / 5)
-        return result
-
-    def getTotalVolumeCredits(statementData):
-        result = 0
-        for perf in statementData['performances']:
-            result += volumeCreditFor(perf)
-        return result
 
     def getTotalAmount(statementData):
         result = 0
@@ -56,14 +61,20 @@ def statement(invoice, plays):
             result += perf['amount']
         return result
 
+    def getTotalVolumeCredits(statementData):
+        result = 0
+        for perf in statementData['performances']:
+            result += perf['volumeCredit']
+        return result
+
     def enrichPerformance(aPerformance):
         result = aPerformance
         calculator = PerformanceCalculator(aPerformance, [playFor(res) for res in aPerformance])
-        calculator.update()
 
         for idx in range(len(aPerformance)):
-            result[idx]['play']  = calculator.play[idx]
-        for res in result: res['amount']= amountFor(res)
+            result[idx]['play']  = calculator.play()[idx]
+            result[idx]['amount']= calculator.amount()[idx]
+            result[idx]['volumeCredit']= calculator.volumeCredit()[idx]
         return result
 
     def createStatementData(invoice):
