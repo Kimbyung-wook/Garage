@@ -3,6 +3,18 @@ import pprint
 
 def statement(invoice, plays):
 
+    class PerformanceCalculator():
+        def __init__(self, aPerformance, aPlay):
+            self._performance = aPerformance
+            self._play = aPlay
+            pprint.pprint(self._performance)
+            pprint.pprint(self._play)
+            self.play = dict()
+
+        def update(self):
+            for idx in range(len(self._performance)):
+                self.play[idx] = playFor(self._performance[idx])
+
     def playFor(aPerformance):
         return plays[aPerformance['playID']]
 
@@ -46,7 +58,11 @@ def statement(invoice, plays):
 
     def enrichPerformance(aPerformance):
         result = aPerformance
-        for res in result: res['play']  = playFor(res)
+        calculator = PerformanceCalculator(aPerformance, [playFor(res) for res in aPerformance])
+        calculator.update()
+
+        for idx in range(len(aPerformance)):
+            result[idx]['play']  = calculator.play[idx]
         for res in result: res['amount']= amountFor(res)
         return result
 
