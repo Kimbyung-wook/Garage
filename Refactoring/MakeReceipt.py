@@ -72,9 +72,9 @@ def statement(invoice, plays):
         calculator = PerformanceCalculator(aPerformance, [playFor(res) for res in aPerformance])
 
         for idx in range(len(aPerformance)):
-            result[idx]['play']  = calculator.play()[idx]
-            result[idx]['amount']= calculator.amount()[idx]
-            result[idx]['volumeCredit']= calculator.volumeCredit()[idx]
+            result[idx]['play']         = calculator.play()[idx]
+            result[idx]['amount']       = calculator.amount()[idx]
+            result[idx]['volumeCredit'] = calculator.volumeCredit()[idx]
         return result
 
     def createStatementData(invoice):
