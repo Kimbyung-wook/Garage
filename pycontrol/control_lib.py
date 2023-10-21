@@ -40,10 +40,12 @@ def design_pid(model, pid_type, wco_target, pm_target=None):
     '''
         model : Linear system model
         pid_type ::
+
             p
             pi
             pd
             pid
+            
         wco_target : Gain cross-over frequency
         pm_target : Phase margin for pi, pd
     '''
